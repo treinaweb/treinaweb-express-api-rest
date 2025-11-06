@@ -40,4 +40,17 @@ router.delete("/books/:id", (req: Request, res: Response) => {
   res.status(204).send();
 });
 
+router.patch("/books/:id", (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const newBook = req.body;
+  const bookIndex = DATABASE_BOOKS.findIndex((book: {id: number}) => book.id === id)
+
+  if (bookIndex < 0) {
+    return res.status(404).json({message: "Livro não encontrado!"});
+  };
+
+  DATABASE_BOOKS[bookIndex] = {...DATABASE_BOOKS[bookIndex], ...newBook}
+  res.status(200).send(DATABASE_BOOKS[bookIndex]);
+});
+
 export default router;
